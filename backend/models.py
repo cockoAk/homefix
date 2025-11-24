@@ -1,6 +1,9 @@
 from sqlalchemy import ForeignKey, Column, Integer, String
 from database import base
+#----------------------------------------------------------------------------#
 
+
+#creacion de usuario con email y password (necesario para login)
 class UserSesion(base):
     __tablename__ = "user_sesion"
 
@@ -9,6 +12,7 @@ class UserSesion(base):
     password = Column(String(100), nullable=False) 
 
 
+#rellenar perfil del usuario con otros datos
 class UserProfile(base):
     __tablename__ = "user_profiles"
 
