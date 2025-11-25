@@ -43,11 +43,13 @@ def read_user_by_email(email: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
 
-app.post("/user_profile/{user_id}/", response_model=fullUserProfile)
+# para crear perfil completo para un usuario existente
+@app.post("/user_profile/{user_id}/", response_model=fullUserProfile)
 def create_profile_for_user(user_id: int, full_name: str, age: int, db: Session = Depends(get_db)):
     return crud.create_userprofile(db=db, user_id=user_id, full_name=full_name, age=age)
 
-app.get("/full_users/", response_model=list[fullUserProfile])
+#para obtener todos los usuarios con su perfil completo
+@app.get("/full_users/", response_model=list[fullUserProfile])
 def read_full_users(db: Session = Depends(get_db)):
     full_users = crud.get_full_users(db)
     result = []
@@ -60,7 +62,8 @@ def read_full_users(db: Session = Depends(get_db)):
         ))
     return result
 
-app.get("user_profiles_by_email/", response_model=fullUserProfile)
+#para obtener el perfil completo de un usuario via su correo
+@app.get("user_profiles_by_email/", response_model=fullUserProfile)
 def read_user_profile_by_email(email: str, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=email)
     if db_user is None:
