@@ -29,13 +29,13 @@ def create_user(user: UserData, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_usersesion(db=db, user=user)
 
-
-
+#para objtener todas las sesiones usuarios
 @app.get("/users/", response_model=list[UserId])
 def read_users(db: Session = Depends(get_db)):
     users = crud.get_users(db)
     return users
 
+#para obtener la sesion via su correo
 @app.get("/user_by_email/", response_model=UserId)
 def read_user_by_email(email: str, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=email)
