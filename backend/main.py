@@ -78,7 +78,13 @@ def read_user_profile_by_email(email: str, db: Session = Depends(get_db)):
         age=db_profile.age
     )
 
-
+#para eliminar un usuario via su correo
+@app.delete("/users/{email}/")
+def delete_user(email: str, db: Session = Depends(get_db)):
+    success = crud.delete_user_by_email(db, email=email)
+    if not success:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"detail": "User deleted successfully"}
 
 
 
