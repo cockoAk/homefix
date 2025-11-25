@@ -24,3 +24,13 @@ def create_userprofile(db: Session, user_id: int, full_name: str, age: int):
 def get_user_by_email(db: Session, email: str):
     return db.query(UserSesion).filter(UserSesion.email == email).first()
 
+
+
+def get_users(db: Session):
+    return db.query(UserSesion).all()
+
+def get_full_users(db: Session):
+    return db.query(UserSesion, UserProfile).join(UserProfile, UserSesion.id == UserProfile.id).all()
+
+
+
