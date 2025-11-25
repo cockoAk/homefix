@@ -86,6 +86,27 @@ def delete_user(email: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User deleted successfully"}
 
+#para actualizar la contraseña de un usuario via su correo
+@app.put("/users/{email}/password/", response_model=UserId)
+def update_user_password(email: str, new_password: str, db: Session = Depends(get_db)):
+    db_user = crud.update_user_password(db, email=email, new_password=new_password)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
+
+#para actualizar el perfil de un usuario via su correo
+@app.put("/user_profiles/{email}/", response_model=fullUserProfile)
+def update_user_profile(email: str, full_name: str, age: int, db: Session = Depends(get_db)):
+    db_profile = crud.update_user_profile(db, email=email, full_name=full_name, age=age)
+    if db_profile is None:
+        raise HTTPException(status_code=404, detail="User profile not found")
+    db_user = crud.get_user_by_email(db, email=email)
+    return fullUserProfile(
+        email=db_user.email,
+        password=db_user.password,
+        full_name=db_profile.full_name,
+        age=db_profile.age
+    )
 
 
 
