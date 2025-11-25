@@ -47,4 +47,23 @@ def delete_user_by_email(db: Session, email: str):
         return True
     return False
 
+def update_user_password(db: Session, email: str, new_password: str):
+    user = get_user_by_email(db, email)
+    if user:
+        user.password = new_password
+        db.commit()
+        db.refresh(user)
+        return user
+    return None
 
+def update_user_profile(db: Session, email: str, full_name: str, age: int):
+    user = get_user_by_email(db, email)
+    if user:
+        profile = db.query(UserProfile).filter(UserProfile.id == user.id).first()
+        if profile:
+            profile.full_name = full_name
+            profile.age = age
+            db.commit()
+            db.refresh(profile)
+            return profile
+    return None
