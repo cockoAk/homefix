@@ -32,5 +32,19 @@ def get_users(db: Session):
 def get_full_users(db: Session):
     return db.query(UserSesion, UserProfile).join(UserProfile, UserSesion.id == UserProfile.id).all()
 
+def get_user_profile_by_email(db: Session, email: str):
+    user = get_user_by_email(db, email)
+    if user is None:
+        return None
+    profile = db.query(UserProfile).filter(UserProfile.id == user.id).first()
+    return user, profile
+
+def delete_user_by_email(db: Session, email: str):
+    user = get_user_by_email(db, email)
+    if user:
+        db.delete(user)
+        db.commit()
+        return True
+    return False
 
 
