@@ -1,1 +1,35 @@
 # HomeFix Project
+
+este es un pequeño proyecto el cual aun esta en desarrollo sobre una aplicacion para llevar el control de mantenimiento de la casa, en esta version actual solo posee el manejo de informacion de los usuario (lo esencial de un CRUD y algun que otro añadido) todo montado en una API (fastAPI) 
+
+para correr el proyecto:
+uvicorn main:app --reload
+
+tecnologias utilizadas
+Package           Version
+----------------- -------
+annotated-doc     0.0.4
+annotated-types   0.7.0
+anyio             4.11.0
+cffi              2.0.0
+click             8.3.1
+colorama          0.4.6
+cryptography      46.0.3
+fastapi           0.121.3
+greenlet          3.2.4
+h11               0.16.0
+idna              3.11
+pip               25.1.1
+pycparser         2.23
+pydantic          2.12.4
+pydantic_core     2.41.5
+PyMySQL           1.1.2
+python-multipart  0.0.20
+sniffio           1.3.1
+SQLAlchemy        2.0.44
+starlette         0.50.0
+typing_extensions 4.15.0
+typing-inspection 0.4.2
+uvicorn           0.38.0
+
+
