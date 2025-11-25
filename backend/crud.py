@@ -24,3 +24,13 @@ def create_userprofile(db: Session, user_id: int, full_name: str, age: int):
 def get_user_by_email(db: Session, email: str):
     return db.query(UserSesion).filter(UserSesion.email == email).first()
 
+#obtener todos los usuarios
+def get_users(db: Session):
+    return db.query(UserSesion).all()
+
+#obtener todos los usuarios con su perfil completo
+def get_full_users(db: Session):
+    return db.query(UserSesion, UserProfile).join(UserProfile, UserSesion.id == UserProfile.id).all()
+
+
+
