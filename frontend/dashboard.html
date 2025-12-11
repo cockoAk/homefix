@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - DominicanQuiz</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header con navegación -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-landmark"></i>
+                <h1>Dominican<span>Quiz</span></h1>
+            </div>
+            <div class="user-menu">
+                <span id="user-name">Cargando...</span>
+                <button id="logout-btn" class="btn btn-small">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard principal -->
+        <main class="dashboard">
+            <!-- Sección de bienvenida -->
+            <section class="card welcome-card">
+                <h2><i class="fas fa-home"></i> ¡Bienvenido/a!</h2>
+                <p id="welcome-message">Cargando información del usuario...</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <i class="fas fa-gamepad"></i>
+                        <span id="games-played">0</span>
+                        <small>Juegos</small>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <span id="total-score">0</span>
+                        <small>Puntos</small>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-star"></i>
+                        <span id="correct-answers">0</span>
+                        <small>Aciertos</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Acciones rápidas -->
+            <div class="quick-actions">
+                <div class="action-card" id="create-quiz-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Crear Quiz</h3>
+                    <p>Crea tu propio quiz sobre cultura dominicana</p>
+                </div>
+
+                <div class="action-card" id="join-game-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-door-open"></i>
+                    </div>
+                    <h3>Unirse a Juego</h3>
+                    <p>Únete a una sala con código</p>
+                </div>
+
+                <div class="action-card" id="create-game-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <h3>Crear Sala</h3>
+                    <p>Crea una sala para jugar con otros</p>
+                </div>
+
+                <div class="action-card" id="my-quizzes-btn">
+                    <div class="action-icon">
+                        <i class="fas fa-list"></i>
+                    </div>
+                    <h3>Mis Quizzes</h3>
+                    <p>Ver y gestionar tus quizzes</p>
+                </div>
+            </div>
+
+            <!-- Salas activas -->
+            <section class="card" id="active-games-section">
+                <h2><i class="fas fa-broadcast-tower"></i> Salas Activas</h2>
+                <div id="active-games-list" class="games-list">
+                    <p class="loading-text">Cargando salas activas...</p>
+                </div>
+                <button id="refresh-games-btn" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                </button>
+            </section>
+
+            <!-- Quizzes públicos -->
+            <section class="card" id="public-quizzes-section">
+                <h2><i class="fas fa-globe-americas"></i> Quizzes Públicos</h2>
+                <div id="public-quizzes-list" class="quizzes-list">
+                    <p class="loading-text">Cargando quizzes...</p>
+                </div>
+                <button id="refresh-quizzes-btn" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Actualizar
+                </button>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Proyecto Final - Programación III</p>
+            <div class="footer-links">
+                <a href="#" id="go-home"><i class="fas fa-home"></i> Inicio</a>
+                <a href="#" id="go-profile"><i class="fas fa-user"></i> Perfil</a>
+                <a href="#" id="go-help"><i class="fas fa-question-circle"></i> Ayuda</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal para unirse a sala -->
+    <div id="join-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2><i class="fas fa-door-open"></i> Unirse a Sala</h2>
+            <div class="form-group">
+                <label for="join-room-code"><i class="fas fa-key"></i> Código de Sala</label>
+                <input type="text" id="join-room-code" placeholder="Ej: A1B2C3D4" maxlength="8">
+            </div>
+            <div class="form-group">
+                <label for="join-player-name"><i class="fas fa-user"></i> Tu Nombre</label>
+                <input type="text" id="join-player-name" placeholder="Ej: Estudiante1">
+            </div>
+            <div class="modal-actions">
+                <button id="join-room-btn" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Unirse
+                </button>
+                <button id="cancel-join-btn" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear sala -->
+    <div id="create-game-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2><i class="fas fa-plus-circle"></i> Crear Nueva Sala</h2>
+            <div class="form-group">
+                <label for="game-quiz-select"><i class="fas fa-question-circle"></i> Seleccionar Quiz</label>
+                <select id="game-quiz-select">
+                    <option value="">Usar quiz generado automáticamente</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="max-players"><i class="fas fa-users"></i> Máximo de Jugadores</label>
+                <input type="range" id="max-players" min="2" max="50" value="20">
+                <span id="max-players-value">20 jugadores</span>
+            </div>
+            <div class="form-group">
+                <label for="room-name"><i class="fas fa-heading"></i> Nombre de la Sala (opcional)</label>
+                <input type="text" id="room-name" placeholder="Ej: Clase de Historia Dominicana">
+            </div>
+            <div class="modal-actions">
+                <button id="create-room-btn" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Crear Sala
+                </button>
+                <button id="cancel-create-btn" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

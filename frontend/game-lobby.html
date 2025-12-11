@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control del Host - DominicanQuiz</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/game-lobby.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="lobby-room">
+    <div class="lobby-container">
+        <!-- Header del lobby -->
+        <header class="lobby-header">
+            <div class="lobby-title">
+                <h1><i class="fas fa-crown"></i> Control del Host</h1>
+                <div class="room-info">
+                    <span class="room-code-display" id="lobby-room-code">Código: ----</span>
+                    <span class="room-status" id="lobby-status">Preparando</span>
+                </div>
+            </div>
+            
+            <div class="host-actions">
+                <button id="start-game-btn" class="btn btn-success">
+                    <i class="fas fa-play"></i> Iniciar Juego
+                </button>
+                <button id="end-game-btn" class="btn btn-danger">
+                    <i class="fas fa-stop"></i> Terminar
+                </button>
+                <button id="back-to-dashboard" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Salir
+                </button>
+            </div>
+        </header>
+
+        <!-- Contenido principal del lobby -->
+        <main class="lobby-main">
+            <!-- Panel izquierdo: Jugadores -->
+            <section class="players-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-users"></i> Jugadores Conectados</h2>
+                    <span class="player-count" id="connected-players">0</span>
+                </div>
+                
+                <div class="players-list" id="lobby-players-list">
+                    <div class="empty-players">
+                        <i class="fas fa-user-clock"></i>
+                        <p>Esperando jugadores...</p>
+                    </div>
+                </div>
+                
+                <div class="players-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-players-count">0</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="ready-players-count">0</div>
+                        <div class="stat-label">Listos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avg-score">0</div>
+                        <div class="stat-label">Puntos avg</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel central: Control del juego -->
+            <section class="control-panel">
+                <div class="game-controls">
+                    <h2><i class="fas fa-gamepad"></i> Control del Juego</h2>
+                    
+                    <div class="control-section">
+                        <h3><i class="fas fa-play-circle"></i> Estado del Juego</h3>
+                        <div class="game-state">
+                            <div class="state-indicator" id="game-state-indicator"></div>
+                            <span id="game-state-text">Esperando jugadores</span>
+                        </div>
+                        
+                        <div class="control-buttons">
+                            <button id="next-question-btn" class="btn btn-primary" disabled>
+                                <i class="fas fa-forward"></i> Siguiente Pregunta
+                            </button>
+                            <button id="show-results-btn" class="btn btn-info" disabled>
+                                <i class="fas fa-chart-bar"></i> Mostrar Resultados
+                            </button>
+                            <button id="skip-question-btn" class="btn btn-warning" disabled>
+                                <i class="fas fa-fast-forward"></i> Saltar Pregunta
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3><i class="fas fa-question-circle"></i> Pregunta Actual</h3>
+                        <div class="current-question-info">
+                            <div class="question-number">
+                                <span id="current-q-number">0</span> / <span id="total-q-number">0</span>
+                            </div>
+                            <div class="question-text" id="current-question-text">
+                                No hay pregunta activa
+                            </div>
+                            <div class="question-timer">
+                                <i class="fas fa-clock"></i>
+                                <span id="question-timer">--</span> segundos restantes
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-section">
+                        <h3><i class="fas fa-sliders-h"></i> Configuración</h3>
+                        <div class="settings-grid">
+                            <div class="setting-item">
+                                <label for="timer-setting">
+                                    <i class="fas fa-hourglass-half"></i> Tiempo por pregunta
+                                </label>
+                                <select id="timer-setting">
+                                    <option value="10">10 segundos</option>
+                                    <option value="20" selected>20 segundos</option>
+                                    <option value="30">30 segundos</option>
+                                    <option value="45">45 segundos</option>
+                                    <option value="60">60 segundos</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label for="music-setting">
+                                    <i class="fas fa-music"></i> Música de fondo
+                                </label>
+                                <select id="music-setting">
+                                    <option value="off">Apagada</option>
+                                    <option value="calm" selected>Suave</option>
+                                    <option value="epic">Épica</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label for="powerups-setting">
+                                    <i class="fas fa-bolt"></i> Power-ups
+                                </label>
+                                <select id="powerups-setting">
+                                    <option value="off">Desactivados</option>
+                                    <option value="on" selected>Activados</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Panel derecho: Estadísticas y ranking -->
+            <section class="stats-panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-chart-line"></i> Estadísticas en Tiempo Real</h2>
+                </div>
+                
+                <div class="stats-content">
+                    <div class="live-stats">
+                        <h3><i class="fas fa-tachometer-alt"></i> Actividad</h3>
+                        <div class="stat-row">
+                            <span>Respuestas recibidas:</span>
+                            <span id="answers-received">0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Correctas/Incorrectas:</span>
+                            <span id="correct-incorrect">0/0</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Tiempo promedio:</span>
+                            <span id="avg-response-time">0s</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Participación:</span>
+                            <span id="participation-rate">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="leaderboard-live">
+                        <h3><i class="fas fa-trophy"></i> Ranking Actual</h3>
+                        <div class="leaderboard-list" id="lobby-leaderboard">
+                            <div class="empty-ranking">
+                                <i class="fas fa-chart-bar"></i>
+                                <p>Esperando datos...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-info">
+                        <h3><i class="fas fa-info-circle"></i> Información del Quiz</h3>
+                        <div class="quiz-details">
+                            <p><strong>Título:</strong> <span id="quiz-title">Quiz de Cultura Dominicana</span></p>
+                            <p><strong>Preguntas:</strong> <span id="quiz-question-count">10</span></p>
+                            <p><strong>Tema:</strong> <span id="quiz-topic">General</span></p>
+                            <p><strong>Dificultad:</strong> <span id="quiz-difficulty">Media</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer del lobby -->
+        <footer class="lobby-footer">
+            <div class="footer-info">
+                <p><i class="fas fa-broadcast-tower"></i> Conectado a sala: <strong id="footer-room-code">----</strong></p>
+                <p><i class="fas fa-user-shield"></i> Eres el host de esta sesión</p>
+            </div>
+            <div class="footer-actions">
+                <button id="copy-code-btn" class="btn btn-small">
+                    <i class="fas fa-copy"></i> Copiar Código
+                </button>
+                <button id="share-link-btn" class="btn btn-small">
+                    <i class="fas fa-share-alt"></i> Compartir
+                </button>
+                <button id="fullscreen-btn" class="btn btn-small">
+                    <i class="fas fa-expand"></i> Pantalla Completa
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal para configuraciones avanzadas -->
+    <div id="advanced-settings-modal" class="modal hidden">
+        <div class="modal-content large">
+            <h2><i class="fas fa-cogs"></i> Configuraciones Avanzadas</h2>
+            <div class="settings-grid-advanced">
+                <div class="setting-advanced">
+                    <h4><i class="fas fa-random"></i> Orden de Preguntas</h4>
+                    <select id="question-order">
+                        <option value="sequential">Secuencial</option>
+                        <option value="random">Aleatorio</option>
+                        <option value="difficulty">Por dificultad</option>
+                    </select>
+                </div>
+                <div class="setting-advanced">
+                    <h4><i class="fas fa-star"></i> Sistema de Puntos</h4>
+                    <select id="points-system">
+                        <option value="standard">Estándar (10 por correcta)</option>
+                        <option value="timed">Con tiempo (más rápido = más puntos)</option>
+                        <option value="streak">Racha (aciertos consecutivos bonus)</option>
+                    </select>
+                </div>
+                <div class="setting-advanced">
+                    <h4><i class="fas fa-eye"></i> Mostrar Respuestas Correctas</h4>
+                    <select id="show-answers">
+                        <option value="always">Siempre</option>
+                        <option value="never">Nunca</option>
+                        <option value="after">Después de responder</option>
+                    </select>
+                </div>
+                <div class="setting-advanced">
+                    <h4><i class="fas fa-user-graduate"></i> Modo de Juego</h4>
+                    <select id="game-mode">
+                        <option value="classic">Clásico (individual)</option>
+                        <option value="teams">Equipos</option>
+                        <option value="survival">Supervivencia (eliminación)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="save-settings-btn" class="btn btn-primary">
+                    <i class="fas fa-save"></i> Guardar Configuración
+                </button>
+                <button id="cancel-settings-btn" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de inicio de juego -->
+    <div id="start-game-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2><i class="fas fa-rocket"></i> ¡Preparados para comenzar!</h2>
+            <div class="start-game-countdown">
+                <div class="countdown-number" id="countdown
