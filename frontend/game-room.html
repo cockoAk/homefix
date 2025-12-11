@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Juego - DominicanQuiz</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/game-room.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="game-room">
+    <div class="game-container">
+        <!-- Header de la sala -->
+        <header class="game-header">
+            <div class="room-info">
+                <h1 id="room-title">
+                    <i class="fas fa-door-open"></i>
+                    <span id="room-name">Cargando sala...</span>
+                </h1>
+                <div class="room-details">
+                    <span class="room-code" id="room-code-display">Código: ----</span>
+                    <span class="room-status" id="room-status">Esperando</span>
+                    <span class="player-count">
+                        <i class="fas fa-users"></i>
+                        <span id="player-count">0</span> jugadores
+                    </span>
+                </div>
+            </div>
+            
+            <div class="player-info">
+                <div class="player-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="player-details">
+                    <span id="player-name">Jugador</span>
+                    <span class="player-score">
+                        <i class="fas fa-star"></i>
+                        <span id="player-score">0</span> puntos
+                    </span>
+                </div>
+                <button id="leave-room-btn" class="btn btn-small btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Salir
+                </button>
+            </div>
+        </header>
+
+        <!-- Contenido principal del juego -->
+        <main class="game-main">
+            <!-- Pantalla de espera -->
+            <section id="waiting-screen" class="game-screen">
+                <div class="waiting-content">
+                    <div class="waiting-icon">
+                        <i class="fas fa-hourglass-half"></i>
+                    </div>
+                    <h2>Esperando que comience el juego</h2>
+                    <p id="waiting-message">El host iniciará el juego pronto...</p>
+                    
+                    <div class="players-list-container">
+                        <h3><i class="fas fa-users"></i> Jugadores en sala</h3>
+                        <div id="players-list" class="players-list">
+                            <p class="loading-text">Cargando jugadores...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="game-code-display">
+                        <h3>Código de la sala:</h3>
+                        <div class="code-box" id="code-box">---- ----</div>
+                        <p class="code-instructions">Comparte este código con otros jugadores</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pantalla de pregunta -->
+            <section id="question-screen" class="game-screen hidden">
+                <div class="question-header">
+                    <div class="question-counter">
+                        <span id="current-question">1</span> / <span id="total-questions">5</span>
+                    </div>
+                    <div class="timer-container">
+                        <div class="timer-circle">
+                            <svg width="80" height="80">
+                                <circle class="timer-background" cx="40" cy="40" r="36"></circle>
+                                <circle class="timer-progress" cx="40" cy="40" r="36"></circle>
+                            </svg>
+                            <span class="timer-text" id="timer">30</span>
+                        </div>
+                    </div>
+                    <div class="question-points">
+                        <i class="fas fa-star"></i>
+                        <span id="question-points">10</span> puntos
+                    </div>
+                </div>
+
+                <div class="question-content">
+                    <h2 id="question-text">Cargando pregunta...</h2>
+                    
+                    <div class="options-grid" id="options-container">
+                        <!-- Las opciones se cargan dinámicamente -->
+                    </div>
+                </div>
+                
+                <div class="question-footer">
+                    <div class="players-answered">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="answered-count">0</span> / <span id="total-players">0</span> respondieron
+                    </div>
+                    <button id="submit-answer-btn" class="btn btn-primary" disabled>
+                        <i class="fas fa-paper-plane"></i> Enviar respuesta
+                    </button>
+                </div>
+            </section>
+
+            <!-- Pantalla de resultados de pregunta -->
+            <section id="results-screen" class="game-screen hidden">
+                <div class="results-header">
+                    <h2><i class="fas fa-chart-bar"></i> Resultados</h2>
+                    <button id="next-question-btn" class="btn btn-primary hidden">
+                        <i class="fas fa-arrow-right"></i> Siguiente pregunta
+                    </button>
+                </div>
+                
+                <div class="results-content">
+                    <div class="answer-feedback" id="answer-feedback">
+                        <div class="feedback-icon correct">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="feedback-text">
+                            <h3>¡Correcto!</h3>
+                            <p id="correct-answer-text">Tu respuesta fue correcta</p>
+                            <p class="points-earned">+<span id="points-earned">10</span> puntos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-container">
+                        <h3>Estadísticas de la pregunta</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="correct-percentage">75%</div>
+                                <div class="stat-label">Respuestas correctas</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="fastest-time">4.2s</div>
+                                <div class="stat-label">Tiempo más rápido</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="your-time">8.5s</div>
+                                <div class="stat-label">Tu tiempo</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="leaderboard-mini">
+                        <h3><i class="fas fa-trophy"></i> Top 5</h3>
+                        <div id="mini-leaderboard" class="mini-leaderboard">
+                            <!-- Ranking se carga dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pantalla final de resultados -->
+            <section id="final-screen" class="game-screen hidden">
+                <div class="final-header">
+                    <h1><i class="fas fa-flag-checkered"></i> ¡Juego Terminado!</h1>
+                    <p class="final-subtitle">Gracias por jugar</p>
+                </div>
+                
+                <div class="final-content">
+                    <div class="player-final-score">
+                        <div class="score-circle">
+                            <span id="final-player-score">0</span>
+                            <small>puntos</small>
+                        </div>
+                        <h2 id="final-player-position">1er lugar</h2>
+                        <p id="final-player-name">Jugador</p>
+                    </div>
+                    
+                    <div class="final-leaderboard">
+                        <h3><i class="fas fa-trophy"></i> Ranking Final</h3>
+                        <div id="final-leaderboard" class="leaderboard-final">
+                            <!-- Ranking final se carga dinámicamente -->
+                        </div>
+                    </div>
+                    
+                    <div class="final-actions">
+                        <button id="play-again-btn" class="btn btn-primary">
+                            <i class="fas fa-redo"></i> Jugar otra vez
+                        </button>
+                        <button id="back-to-dashboard-btn" class="btn btn-secondary">
+                            <i class="fas fa-home"></i> Volver al inicio
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Chat lateral (opcional) -->
+        <aside class="game-sidebar hidden">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-comments"></i> Chat</h3>
+                <button id="close-chat-btn" class="btn-icon">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Mensajes del chat -->
+            </div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Escribe un mensaje...">
+                <button id="send-chat-btn" class="btn-icon">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Botón para abrir chat -->
+        <button id="open-chat-btn" class="floating-btn">
+            <i class="fas fa-comment"></i>
+            <span class="notification-badge hidden" id="chat-notification">3</span>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/websocket.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
